@@ -6,7 +6,7 @@ from .models import( Profile ,
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ['get_user_name','get_first_name','get_last_name','title', 'summary']
+    list_display = ['get_user_name','get_first_name','get_last_name','bio', 'summary']
 
     def get_first_name(self,obj):
         return obj.user.first_name
