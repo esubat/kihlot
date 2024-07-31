@@ -3,10 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
-
-    # the title field in here is a specific role or designation of a user .
+    
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    title = models.CharField(max_length=100, null=True, blank=True)
+    bio = models.CharField(max_length=100, null=True, blank=True)
     image = models.ImageField(upload_to='userProfile/', null=True)
     summary = models.CharField(max_length=250, null=True, blank=True)
 
