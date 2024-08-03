@@ -31,3 +31,28 @@ class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'profile']
+
+
+
+class UserProfileUpdateSerializer(serializers.Serializer):
+
+    profile = ProfileSerializer()
+
+    class Meta:
+        model = User
+        fields = fields = ['username', 'first_name', 'last_name', 'profile']
+    
+    def update(self, instance, validated_date, *args, **kwargs):
+        profile_data = validated_date.pop('profile')
+        profile_serializer = self.fields['profile']
+
+        for attr, val in validated_date.items():
+            setattr(instance, attr, val)
+        
+        instance.save()
+
+        profile_instance = instance.profile
+
+        profile_serializer.update(profile_instance, profile_data)
+
+        return instance
