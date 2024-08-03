@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated,AllowAny
 
-from .serializers import UserRegistrationSerializer, UserDetailSerializer
+from .serializers import UserRegistrationSerializer, UserDetailSerializer, UserProfileUpdateSerializer
 
 
 class RegisterView(APIView):
@@ -65,3 +65,16 @@ class UserDetailView(APIView):
 
         return Response(serializer.data , status = status.HTTP_200_OK)
     
+
+class UserProfileUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+    def put(self, request, *args , **kwargs):
+        user = request.user
+        serializer = UserProfileUpdateSerializer(user, data=request.data , partial= True)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return Response(serializer.data , status = status.HTTP_202_ACCEPTED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
